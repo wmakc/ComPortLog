@@ -20,18 +20,18 @@ public class PortSettings  extends JFrame { /*Создаем подкласс Wi
 
         setSize(350, 350);  /*Метод суперкласса для установкиразмеров окна, в пикселях*/
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // При нажатии крестика окно закрывается
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // При нажатии крестика окно закрывается
 
         Font font = new Font("Verdana", Font.PLAIN, 18); // Создаем шрифт для компонентов
 
         //Создаем объекты
         JPanel mainPanel = new JPanel();                                      // Создание панели, на которой все будет размещаться
-        mainPanel.setLayout(new GridLayout(6,2,5,5)); // Способ размещения - сетка
+        mainPanel.setLayout(new GridLayout(6, 2, 5, 5)); // Способ размещения - сетка
 
         ActionListener actionListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JComboBox box = (JComboBox)e.getSource();
-                String item = (String)box.getSelectedItem();
+                JComboBox box = (JComboBox) e.getSource();
+                String item = (String) box.getSelectedItem();
                 //lablName.setText(item);
             }
         };
@@ -74,6 +74,7 @@ public class PortSettings  extends JFrame { /*Создаем подкласс Wi
         cbBaudrate.setFont(font);
         cbBaudrate.setAlignmentX(RIGHT_ALIGNMENT);
         cbBaudrate.addActionListener(actionListener);
+        cbBaudrate.setSelectedIndex(12);
         mainPanel.add(cbBaudrate);
 
         final JLabel lablData = new JLabel("DataBits");
@@ -90,6 +91,7 @@ public class PortSettings  extends JFrame { /*Создаем подкласс Wi
         cbData.setFont(font);
         cbData.setAlignmentX(RIGHT_ALIGNMENT);
         cbData.addActionListener(actionListener);
+        cbData.setSelectedIndex(3);
         mainPanel.add(cbData);
 
         final JLabel lablParity = new JLabel("Parity");
@@ -142,13 +144,24 @@ public class PortSettings  extends JFrame { /*Создаем подкласс Wi
 
         getContentPane().add(mainPanel);
 
+
         JButton bnOpen = new JButton("Open port");  /*Создаем кнопку и надпись на  ней*/
         add(bnOpen, BorderLayout.SOUTH); /*Кнопку в южной части*/
         bnOpen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ComPort.openPort((String)cbName.getSelectedItem());
+//                if((int) cbFlowcontrol.getSelectedItem() == 0) {
+                    ComPort.openPort((String) cbName.getSelectedItem(), Integer.parseInt((String) cbBaudrate.getSelectedItem()),
+                            Integer.parseInt((String) cbData.getSelectedItem()), cbStopbits.getItemCount(), cbParity.getItemCount(), false, false);
+      /*          }else if((int) cbFlowcontrol.getSelectedItem() == 1) {
+                    ComPort.openPort((String) cbName.getSelectedItem(), Integer.parseInt((String) cbBaudrate.getSelectedItem()),
+                            Integer.parseInt((String) cbData.getSelectedItem()), cbStopbits.getItemCount(), cbParity.getItemCount(), true, false);
+                }else if((int) cbFlowcontrol.getSelectedItem() == 2) {
+                    ComPort.openPort((String) cbName.getSelectedItem(), Integer.parseInt((String) cbBaudrate.getSelectedItem()),
+                            Integer.parseInt((String) cbData.getSelectedItem()), cbStopbits.getItemCount(), cbParity.getItemCount(), false, true);
+                }*/
                 dispose();
             }
         });
     }
+
 }

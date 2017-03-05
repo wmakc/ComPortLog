@@ -31,12 +31,12 @@ public class ComPort {
         flowControl = flow;
     }
 
-    public static boolean openPort(String name)
+    public static boolean openPort(String name, int baud, int data, int stop, int par, boolean rts, boolean dtr)
     {
         serialPort = new SerialPort (name); /*Передаем в конструктор суперкласса имя порта с которым будем работать*/
         try {
             serialPort.openPort (); /*Метод открытия порта*/
-            serialPort.setParams (SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE); /*Задаем основные параметры протокола UART*/
+            serialPort.setParams (baud, data, stop, par, rts, dtr); /*Задаем основные параметры протокола UART*/
             serialPort.setEventsMask (SerialPort.MASK_RXCHAR); /*Устанавливаем маску или список события на которые будет происходить реакция. В данном случае это приход данных в буффер порта*/
             serialPort.addEventListener (new EventListener()); /*Передаем экземпляр класса EventListener порту, где будет обрабатываться события. Ниже описан класс*/
             return true;

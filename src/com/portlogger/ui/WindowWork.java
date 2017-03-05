@@ -21,6 +21,8 @@ public class WindowWork extends JFrame{ /*Создаем подкласс Window
     private static final String TITLE = "Logger";
     private ComPort port = new ComPort("COM3", 9600, 8, 0, 1, 0);
     private static Label myLabel;
+    private static DefaultListModel listModel = new DefaultListModel();
+    private JList list = new JList(listModel);
 
     public WindowWork() /*Конструктор класса*/
     {
@@ -75,7 +77,7 @@ public class WindowWork extends JFrame{ /*Создаем подкласс Window
         Button myButton = new Button ("Мониторинг");  /*Создаем кнопку и надпись на  ней*/
         myLabel = new Label ("Данные логгера"); /* Создаем текстовое поле и надпись в нем*/
 
-        add (myLabel, BorderLayout.NORTH); /* С помощью менеджера размещения, располагаем текстовое поле в северной части окна*/
+        add (list, BorderLayout.NORTH); /* С помощью менеджера размещения, располагаем текстовое поле в северной части окна*/
         add (myButton, BorderLayout.SOUTH); /*Кнопку в южной части*/
         myButton.addActionListener (new ActionListener () {    /*Для кнопки выбираем событие слушателя, и создаем новое событие в скобках.*/
             public void actionPerformed (ActionEvent e) {
@@ -88,7 +90,8 @@ public class WindowWork extends JFrame{ /*Создаем подкласс Window
 
     public static void logOut(String data)
     {
-        myLabel.setText(data);
+        //myLabel.setText(data);
+        listModel.addElement(data);
     }
 
 
@@ -98,6 +101,7 @@ public class WindowWork extends JFrame{ /*Создаем подкласс Window
            /*Наше окно запускается и отображается, при нажатии на кнопку меняется надпись в текстовом поле. Что бы закрыть окно необходимо добавить код обработки события, который работает следующим образом: мы вызываем для объекта log метод addWindowListener для того, чтобы назначить слушателя оконных событий. В качестве параметра создаем объект абстрактного класса WindowAdapter, в котором создаем класс и переопределяем метод для обработки события закрытия окна -  dispose.*/
         window.addWindowListener (new WindowAdapter () {
             public void windowClosing (WindowEvent e) {    // в качестве аргумента передаем событие
+                ComPort.closePort();
                 e.getWindow ().dispose ();                               // уничтожает объект Frame
             }
         });
